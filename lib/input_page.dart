@@ -14,12 +14,27 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Color malecolor = inactivecardcolor;
+  Color malecolor = activecardcolor;
   Color femalecolor = inactivecardcolor;
 
-  void updatecolor(int gender){
-
-
+  void updatecolor(int gender) {
+    if (gender == 1) {
+      if (malecolor == inactivecardcolor) {
+        malecolor = activecardcolor;
+        femalecolor = inactivecardcolor;
+      } else {
+        femalecolor = activecardcolor;
+        malecolor = inactivecardcolor;
+      }
+    } else {
+      if (femalecolor == inactivecardcolor) {
+        femalecolor = activecardcolor;
+        malecolor = inactivecardcolor;
+      } else {
+        malecolor = activecardcolor;
+        femalecolor = inactivecardcolor;
+      }
+    }
   }
 
   @override
@@ -35,9 +50,13 @@ class _InputPageState extends State<InputPage> {
               children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      setState(() {
+                        updatecolor(1);
+                      });
+                    },
                     child: ReusableCard(
-                        colour: activecardcolor,
+                        colour: malecolor,
                         cardchild: IconContent(
                           icon: Icon(
                             FontAwesomeIcons.mars,
@@ -49,9 +68,13 @@ class _InputPageState extends State<InputPage> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      setState(() {
+                        updatecolor(2);
+                      });
+                    },
                     child: ReusableCard(
-                        colour: inactivecardcolor,
+                        colour: femalecolor,
                         cardchild: IconContent(
                           icon: Icon(
                             FontAwesomeIcons.venus,
