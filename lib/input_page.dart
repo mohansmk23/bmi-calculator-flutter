@@ -1,12 +1,10 @@
 import 'package:bmi_calculator/reusable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'constants.dart';
 import 'icon_content.dart';
 
-const bottomcontainerheight = 60.0;
-const activecardcolor = Color(0xFF1D1F33);
-const inactivecardcolor = Color(0xFF111328);
-const bottomcontainercolor = Color(0xFFEB1555);
+enum Gender { male, female }
 
 class InputPage extends StatefulWidget {
   @override
@@ -14,28 +12,8 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Color malecolor = activecardcolor;
-  Color femalecolor = inactivecardcolor;
-
-  void updatecolor(int gender) {
-    if (gender == 1) {
-      if (malecolor == inactivecardcolor) {
-        malecolor = activecardcolor;
-        femalecolor = inactivecardcolor;
-      } else {
-        femalecolor = activecardcolor;
-        malecolor = inactivecardcolor;
-      }
-    } else {
-      if (femalecolor == inactivecardcolor) {
-        femalecolor = activecardcolor;
-        malecolor = inactivecardcolor;
-      } else {
-        malecolor = activecardcolor;
-        femalecolor = inactivecardcolor;
-      }
-    }
-  }
+  Gender selectedgender;
+  int height = 120;
 
   @override
   Widget build(BuildContext context) {
@@ -44,68 +22,107 @@ class _InputPageState extends State<InputPage> {
         title: Text('BMI CALCULATOR'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        updatecolor(1);
-                      });
-                    },
-                    child: ReusableCard(
-                        colour: malecolor,
-                        cardchild: IconContent(
-                          icon: Icon(
-                            FontAwesomeIcons.mars,
-                            size: 80.0,
-                          ),
-                          text: 'MALE',
-                        )),
-                  ),
+                  child: ReusableCard(
+                      onpress: () {
+                        setState(() {
+                          selectedgender = Gender.male;
+                        });
+                      },
+                      colour: selectedgender == Gender.male
+                          ? kActivecardcolor
+                          : kInactivecardcolor,
+                      cardchild: IconContent(
+                        icon: Icon(
+                          FontAwesomeIcons.mars,
+                          size: 80.0,
+                        ),
+                        text: 'MALE',
+                      )),
                 ),
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        updatecolor(2);
-                      });
-                    },
-                    child: ReusableCard(
-                        colour: femalecolor,
-                        cardchild: IconContent(
-                          icon: Icon(
-                            FontAwesomeIcons.venus,
-                            size: 80.0,
-                          ),
-                          text: 'FEMALE',
-                        )),
-                  ),
+                  child: ReusableCard(
+                      onpress: () {
+                        setState(() {
+                          selectedgender = Gender.female;
+                        });
+                      },
+                      colour: selectedgender == Gender.female
+                          ? kActivecardcolor
+                          : kInactivecardcolor,
+                      cardchild: IconContent(
+                        icon: Icon(
+                          FontAwesomeIcons.venus,
+                          size: 80.0,
+                        ),
+                        text: 'FEMALE',
+                      )),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ReusableCard(colour: activecardcolor),
+            child: ReusableCard(
+              colour: kActivecardcolor,
+              cardchild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "HEIGHT",
+                    style: kLabeltextstyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.ideographic,
+                    children: <Widget>[
+                      Text(
+                        height.toString(),
+                        style: kBigtextstyle,
+                      ),
+                      Text(
+                        "cm",
+                        style: kLabeltextstyle,
+                      )
+                    ],
+                  ),
+                  Slider(
+                    value: height.toDouble(),
+                    min: 120,
+                    max: 220,
+                    activeColor: Color(0xFFEB1555),
+                    inactiveColor: Color(0xFF8D8E98),
+                    onChanged: (double newvalue) {
+                      setState(() {
+                        height = newvalue.round();
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
           Expanded(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ReusableCard(colour: activecardcolor),
+                  child: ReusableCard(colour: kActivecardcolor),
                 ),
                 Expanded(
-                  child: ReusableCard(colour: activecardcolor),
+                  child: ReusableCard(colour: kActivecardcolor),
                 ),
               ],
             ),
           ),
           Container(
-            color: bottomcontainercolor,
+            color: kBottomcontainercolor,
             width: double.infinity,
-            height: bottomcontainerheight,
+            height: kBottomcontainerheight,
           )
         ],
       ),
